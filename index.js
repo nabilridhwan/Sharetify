@@ -62,7 +62,9 @@ app.post("/signup", (request, response) => {
     if (confirmpassword !== password) {
         // Redirect to error page (by request)
         errorHandler("Both passwords does not match!", request, response);
-    } else {
+    } else if(username == "" || password == "" || confirmpassword == ""){
+        errorHandler("Do not leave anything blank!", request, response);
+    }else {
         // Check if user exist
         ushd.checkIfExist(username).then(doesExist => {
             console.log(doesExist);
