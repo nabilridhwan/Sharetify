@@ -1,0 +1,118 @@
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container">
+
+                <div class="columns is-vcentered">
+                    <div class="column" style="text-align: center;">
+                        <h1 class="title is-1">Welcome to Sharetify!</h1>
+                        <p class="subtitle">
+                            A social media aimed at sharing songs from Spotify with captions. A "post" is called a
+                            "Share". Try it out!
+                        </p>
+
+                        <a href="/shares" class="button is-danger">
+                            <strong>See Current Shares</strong>
+                        </a>
+
+                        <a href="/signup" class="button is-dark">
+                            Sign Up!
+                        </a>
+
+                        <a href="/login" class="button is-light">
+                            Log In!
+                        </a>
+                    </div>
+
+                    <div class="column">
+
+                        <h1 class="title" style="text-align: center;">Latest Share</h1>
+
+                        <% if(shares.length !== 0){ %>
+                            <div class="card" style="width: 300px; margin: auto;">
+
+                                <div class="card-image">
+                                    <figure class="image">
+                                        <iframe src="<%=shares[0].embedLink %>" width="300" height="380" frameborder="0"
+                                            allowtransparency="true" allow="encrypted-media"></iframe>
+                                    </figure>
+                                </div>
+    
+    
+                                <div class="card-content">
+                                    <p class="title is-4" style="color: black;">
+                                        <%= shares[0].share_caption %>
+                                    </p>
+                                    <p class="subtitle" style="color: black;">
+                                        by <%= shares[0].userCreated.username %>
+                                    </p>
+    
+                                    <h6 class="header is-size-7">
+                                        <%= new Date(shares[0].dateCreated).toLocaleDateString("en-US", {
+                                            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                                            hour: "numeric", "minute": "numeric"
+                                        }) %>
+                                    </h6>
+                                </div>
+                            </div>
+                        <% }else{ %>
+                            <h1 class="title is-5" style="text-align: center;">There are no shares :(</h1>
+                        <% } %>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="section">
+        <div class="container">
+            <h1 class="title is-2">How do I share a song?</h1>
+            <p class="subtitle">Its easy, in 5 steps. You don't even need a Spotify Premium account!</p>
+
+            <ol>
+                <li>
+                    <a href="/signup">Sign up</a> or <a href="/login">Log in</a> to Sharetify.
+                </li>
+
+                <li>Head to your profile page by clicking the 'My Profile' button or click <a href="/profile">here</a>. </li>
+
+                <li>
+                    Get the Spotify song link by going to your preferred official Spotify client, sharing the track and clicking on "Copy Song Link"
+                </li>
+
+                <li>
+                    Under the Share a song! section, Type in your preferred caption and paste the song link on the input box below the Caption input box.
+                </li>
+
+                <li>Click "Share!" and your share will be live!</li>
+            </ol>
+
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <h1 class="title is-2">Welcome to Sharetify Open Beta</h1>
+            <p class="subtitle">Hope the beta goes well!</p>
+
+            <p>Hello, welcome to Sharetify's open beta! Just some pointers: do not worry about your passwords, I do not
+                store your passwords in plaintext, instead they are hashed (or encrypted) and it is only one way, there
+                is
+                no possible way to un-hash or decrypt your password! Even I don't know your password!
+            </p>
+            <br>
+            <p>Sharetify may be subjected to changes in terms of design and functionality. Live-changes may happen and
+                users
+                may face some errors, if you are one of the users, please try again later.</p>
+        </div>
+    </div>
+
+</body>

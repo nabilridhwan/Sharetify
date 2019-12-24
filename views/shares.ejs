@@ -1,0 +1,49 @@
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <section class="section">
+
+        <div class="container">
+            <h1 class="title is-5">Want to share your own favourite track and also a caption that follows along?</h1>
+            <p class="subtitle">You can <a href="/signup">Sign Up for a free Sharetify account!</a> </p>
+
+            <div class="columns is-multiline">
+                <% shares.reverse().forEach(share => { %>
+                <div class="column">
+                    <div class="card" style="width: 300px;">
+
+                        <div class="card-image">
+                            <figure class="image">
+                                <iframe src="<%=share.embedLink %>" width="300" height="380" frameborder="0"
+                                    allowtransparency="true" allow="encrypted-media"></iframe>
+                            </figure>
+                        </div>
+
+
+                        <div class="card-content">
+                            <p class="title is-4">
+                                <%= share.share_caption %>
+                            </p>
+                            <p class="subtitle">
+                                by <%= share.userCreated.username %>
+                            </p>
+
+                            <h6 class="header is-size-7">
+                                <%= new Date(share.dateCreated).toLocaleDateString("en-US", {
+                                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                                    hour: "numeric", "minute": "numeric"
+                                }) %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+
+    </section>
+</body>

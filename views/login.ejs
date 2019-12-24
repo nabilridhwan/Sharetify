@@ -1,0 +1,32 @@
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Log In into your Sharetify Account</h1>
+        <p class="subtitle">
+            <a href="/signup">
+                Or sign up!
+            </a>
+        </p>
+
+        <form action="/login" method="post">
+
+            <div class="field">
+                <input class="input" type="text" placeholder="Username" name="username">
+            </div>
+
+            <div class="field">
+                <input class="input" type="password" placeholder="Password" name="password">
+            </div>
+
+
+            <button class="button is-primary" type="submit">Log In!</button>
+        </form>
+        </div>
+    </section>
+</body>

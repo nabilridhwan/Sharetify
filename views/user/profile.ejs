@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <%- include("../partials/head") %>
+</head>
+
+<body>
+    <%- include("../partials/navbar") %>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Welcome back, <%=userdata.username%>!</h1>
+            <p class="subtitle">So nice to have you here!</p>
+
+
+
+            <div class="section">
+                <p class="title is-4">Share a song!</p>
+                <form action="/new/share" method="post">
+
+                    <div class="field">
+                        <input type="text" class="input" placeholder="Caption" name="share_caption">
+                    </div>
+
+
+                    <div class="field">
+                        <input type="url" class="input"
+                            placeholder="Spotify Track UR - Copy Song Link and Paste it here!" name="share_track_uri">
+                    </div>
+
+                    <button class="button is-primary" type="submit">Share!</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <p class="title is-4">Account Management</p>
+                <form action="/logout" method="post">
+                    <button class="button is-dark">
+                        Logout of <%=userdata.username%>
+                    </button>
+                </form>
+            </div>
+
+            <div class="section">
+                <p class="title is-4">Change your password!</p>
+                <form action="/changepassword" method="post">
+                    <div class="field">
+                        <input class="input" placeholder="Previous Password" type="password" name="previouspassword">
+                    </div>
+
+
+                    <div class="field">
+                        <input class="input" placeholder="New Password" type="password" name="newpassword">
+                    </div>
+
+
+                    <div class="field">
+                        <input class="input" placeholder="Confirm New Password" type="password"
+                            name="confirmnewpassword">
+                    </div>
+
+                    <button class="button is-primary" type="submit">
+                        Change Password!
+                    </button>
+                </form>
+            </div>
+
+
+        </div>
+    </section>
+</body>
+
+</html>

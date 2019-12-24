@@ -1,0 +1,37 @@
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Sign Up for a free Sharetify account!</h1>
+        <p class="subtitle">
+            <a href="/login">
+                Or log in!
+            </a>
+        </p>
+
+        <form action="/signup" method="post">
+            
+            <div class="field">
+                <input class="input" type="text" placeholder="Username" name="username">
+            </div>
+            
+            
+            <div class="field">
+                <input class="input" type="password" placeholder="Password" name="password">
+            </div>
+            
+            
+            <div class="field">
+                <input class="input" type="password" placeholder="Confirm Password" name="confirmpassword">
+            </div>
+            
+            <button class="button is-primary" type="submit">Sign Up!</button>
+        </form>
+        </div>
+    </section>
+</body>
