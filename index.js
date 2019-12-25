@@ -197,6 +197,10 @@ app.post("/logout", (request, response) => {
     response.redirect("/")
 })
 
+app.get("/currentusersession", (request, response) => {
+    response.send(request.session)
+})
+
 
 // FIXME: Do the change password route
 app.post("/changepassword", (request, response) => {

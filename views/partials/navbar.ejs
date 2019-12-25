@@ -28,13 +28,15 @@
                 <div class="navbar-item">
                     <div class="buttons">
 
-                        <a class="button is-dark" href="/signup">
-                            <strong>Sign up</strong>
-                        </a>
+                        <span id="signup_login_buttons">
+                            <a class="button is-dark" href="/signup">
+                                <strong>Sign up</strong>
+                            </a>
 
-                        <a class="button is-light" href="/login">
-                            Log in
-                        </a>
+                            <a class="button is-light" href="/login">
+                                Log in
+                            </a>
+                        </span>
 
                         <a class="button is-danger" href="/profile">
                             My Profile
@@ -72,4 +74,11 @@
         }
 
     });
+
+    fetch(document.URL.split("/")[0] + "currentusersession").then(data => data.json())
+        .then(json => {
+            if (json.userdata) {
+                document.getElementById("signup_login_buttons").style.display = "none";
+            }
+        })
 </script>
