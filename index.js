@@ -3,17 +3,14 @@ let bodyParser = require('body-parser');
 let UserHandler = require('./UserHandler');
 let bcrypt = require('bcryptjs');
 let session = require('express-session');
-let fs = require('fs');
-let SHARES_DATA_PATH = "./data/shares.json"
 let app = express();
 let mongoose = require('mongoose');
 
-// FIXME: Only use this if locals
 require('dotenv').config()
 // REMEMBER TO SET THE DB PASSWORD!
-let dbpwd = process.env.dbpwd
+let mongodbURI = process.env.mongodbURI
 
-mongoose.connect(`mongodb+srv://admin:${dbpwd}@sharetify-o8bis.gcp.mongodb.net/sharetify?retryWrites=true&w=majority&authSource=admin`)
+mongoose.connect(mongodbURI)
 .then(_ => {
     console.log("Tested connecting!")
 })

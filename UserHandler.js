@@ -1,8 +1,4 @@
-let fs = require('fs');
 let bcrypt = require('bcryptjs');
-let USER_DATA_PATH = "./data/users.json",
-    EMPTY_ARRAY = [];
-
 let mongoose = require('mongoose')
 let userModel = mongoose.model('user', new mongoose.Schema({
     username: String,
