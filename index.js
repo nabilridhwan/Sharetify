@@ -14,6 +14,9 @@ let mongoose = require('mongoose');
 let dbpwd = process.env.dbpwd
 
 mongoose.connect(`mongodb+srv://admin:${dbpwd}@sharetify-o8bis.gcp.mongodb.net/sharetify?retryWrites=true&w=majority`)
+.then(_ => {
+    console.log("Tested connecting!")
+})
 
 let PORT = process.env.PORT || 3000;
 let shareModel = mongoose.model('share', new mongoose.Schema({
