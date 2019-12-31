@@ -3,29 +3,27 @@ let bcrypt = require('bcryptjs');
 let USER_DATA_PATH = "./data/users.json",
     EMPTY_ARRAY = [];
 
+let mongoose = require('mongoose')
+let userModel = mongoose.model('user', new mongoose.Schema({
+    username: String,
+    password: String,
+    profileCreated: String,
+}))
+
 class UserHandler {
     checkIfExist(username) {
+
         return new Promise((resolve, reject) => {
-            console.log("Checking!")
-            let userfound = false;
-
-            fs.readFile(USER_DATA_PATH, (error, data) => {
-                let json = JSON.parse(data);
-
-                // FIXME: resolve and rejection
-                if (json.length !== 0) {
-                    json.forEach(user => {
-                        console.log(username == user.username)
-                        if (username == user.username) {
-                            userfound = true;
-                        }
-                    })
+            userModel.find({
+                username: username
+            }).then(data => {
+                console.log(data)
+                if (data.length !== 0) {
+                    resolve(true)
+                } else {
+                    resolve(false)
                 }
             })
-
-            setTimeout(() => {
-                resolve(userfound)
-            }, 100);
         })
 
     }
@@ -34,38 +32,20 @@ class UserHandler {
 
         console.log("Forcing!")
 
-        fs.readFile(USER_DATA_PATH, (error, data) => {
-            let json = JSON.parse(data);
-            let hashedpassword = bcrypt.hashSync(password, 10);
-
-            json.push({
-                username: username,
-                password: hashedpassword,
-                dateCreated: new Date(),
-            })
-
-            fs.writeFile(USER_DATA_PATH, JSON.stringify(json), (err) => {
-                if (err) console.log(err)
-            })
-        })
+        new userModel({
+            username: username,
+            password: bcrypt.hashSync(password, 10),
+            profileCreated: new Date().toUTCString()
+        }).save()
     }
 
 
     getUser(username) {
         return new Promise((resolve, reject) => {
-            fs.readFile(USER_DATA_PATH, (error, data) => {
-                let json = JSON.parse(data);
-
-                if (json.length !== 0) {
-                    // Find the user!
-                    json.forEach(user => {
-                        if (username == user.username) {
-                            resolve(user);
-                        }
-                    })
-                } else {
-                    resolve(EMPTY_ARRAY);
-                }
+            userModel.findOne({
+                username: username
+            }).then(data => {
+                resolve(data)
             })
         })
     }

@@ -40,7 +40,7 @@
 
                                 <div class="card-image">
                                     <figure class="image">
-                                        <iframe src="<%=shares[0].embedLink %>" width="300" height="380" frameborder="0"
+                                        <iframe src="<%=shares.embedLink %>" width="300" height="380" frameborder="0"
                                             allowtransparency="true" allow="encrypted-media"></iframe>
                                     </figure>
                                 </div>
@@ -48,14 +48,14 @@
     
                                 <div class="card-content">
                                     <p class="title is-4" style="color: black;">
-                                        <%= shares[0].share_caption %>
+                                        <%= shares.share_caption %>
                                     </p>
                                     <p class="subtitle" style="color: black;">
-                                        by <%= shares[0].userCreated.username %>
+                                        by <%= shares.userCreated.username %>
                                     </p>
     
                                     <h6 class="header is-size-7">
-                                        <%= new Date(shares[0].dateCreated).toLocaleDateString("en-US", {
+                                        <%= new Date(shares.dateCreated).toLocaleDateString("en-US", {
                                             weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
                                             hour: "numeric", "minute": "numeric"
                                         }) %>

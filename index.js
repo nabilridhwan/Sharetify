@@ -6,8 +6,22 @@ let session = require('express-session');
 let fs = require('fs');
 let SHARES_DATA_PATH = "./data/shares.json"
 let app = express();
+let mongoose = require('mongoose');
+
+require('dotenv').config()
+// REMEMBER TO SET THE DB PASSWORD!
+let dbpwd = process.env.dbpwd
+
+mongoose.connect(`mongodb+srv://admin:${dbpwd}@sharetify-o8bis.gcp.mongodb.net/sharetify?retryWrites=true&w=majority`)
 
 let PORT = process.env.PORT || 3000;
+let shareModel = mongoose.model('share', new mongoose.Schema({
+    share_caption: String,
+    share_track_uri: String,
+    userCreated: Object,
+    embedLink: String,
+    dateCreated: String,
+}))
 
 let ushd = new UserHandler();
 
@@ -31,15 +45,16 @@ app.use((request, response, next) => {
 
 app.get("/", (request, response) => {
 
-    fs.readFile(SHARES_DATA_PATH, (error, data) => {
+    shareModel.findOne().then(data => {
+        console.log(data)
         response.render("home", {
-            "shares": JSON.parse(data).reverse()
+            "shares": data
         });
     })
 })
 
 app.get("/signup", (request, response) => {
-    if (request.session.userdata) {
+    if (request.session.currentUser) {
         response.redirect("profile")
         response.end()
     } else {
@@ -50,7 +65,7 @@ app.get("/signup", (request, response) => {
 
 app.post("/signup", (request, response) => {
 
-    // Replaces all spaces with nothing
+    // TODO: Remove spaces from usernme in signup path
     console.log("Hit Signup!")
     let {
         password,
@@ -62,9 +77,9 @@ app.post("/signup", (request, response) => {
     if (confirmpassword !== password) {
         // Redirect to error page (by request)
         errorHandler("Both passwords does not match!", request, response);
-    } else if(username == "" || password == "" || confirmpassword == ""){
+    } else if (username == "" || password == "" || confirmpassword == "") {
         errorHandler("Do not leave anything blank!", request, response);
-    }else {
+    } else {
         // Check if user exist
         ushd.checkIfExist(username).then(doesExist => {
             console.log(doesExist);
@@ -83,8 +98,8 @@ app.post("/signup", (request, response) => {
 })
 
 app.get("/login", (request, response) => {
-    console.log(request.session.userdata)
-    if (request.session.userdata !== undefined) {
+    console.log(request.session.currentUser)
+    if (request.session.currentUser !== undefined) {
         response.redirect("profile")
         response.end()
     } else {
@@ -95,11 +110,9 @@ app.get("/login", (request, response) => {
 
 app.post("/login", (request, response) => {
     let {
+        username,
         password,
     } = request.body;
-
-    // Replaces all spaces with nothing
-    let username = request.body.username.replace(" ", "");
 
     console.log(`Username: ${username}`)
 
@@ -110,12 +123,13 @@ app.post("/login", (request, response) => {
 
             // Get the user!
             ushd.getUser(username).then(user => {
+
                 // Verify the password!
                 bcrypt.compare(password, user.password).then(isCorrect => {
                     console.log(isCorrect);
                     if (isCorrect) {
                         // Set the session to the user!
-                        request.session.userdata = user;
+                        request.session.currentUser = user;
                         console.log(request.session)
 
                         // Redirect to profile page
@@ -140,9 +154,9 @@ app.get("/error", (request, response) => {
 })
 
 app.get("/profile", (request, response) => {
-    if (request.session.userdata !== undefined) {
+    if (request.session.currentUser !== undefined) {
         response.render("user/profile", {
-            "userdata": request.session.userdata
+            "userdata": request.session.currentUser
         })
     } else {
         response.redirect("login")
@@ -150,6 +164,9 @@ app.get("/profile", (request, response) => {
 })
 
 app.post("/new/share", (request, response) => {
+
+    console.log(request.session.currentUser);
+
     let {
         share_caption,
         share_track_uri
@@ -161,23 +178,16 @@ app.post("/new/share", (request, response) => {
         let uri = share_track_uri.split("/")[4];
 
         let embed_link = `https://open.spotify.com/embed/${type}/${uri}`
-        // TODO: Write a post handler class! - bring along the fs require
-        fs.readFile(SHARES_DATA_PATH, (error, data) => {
-            let json = JSON.parse(data);
-            json.push({
-                "share_caption": share_caption,
-                "share_track_uri": share_track_uri,
-                "userCreated": request.session.userdata,
-                "embedLink": embed_link,
-                "dateCreated": new Date(),
-            })
 
-            fs.writeFile(SHARES_DATA_PATH, JSON.stringify(json), (err => {
-                if (err) console.log(err)
-            }))
+        new shareModel({
+            share_caption: share_caption,
+            share_track_uri: share_track_uri,
+            userCreated: request.session.currentUser,
+            embedLink: embed_link,
+            dateCreated: new Date().toUTCString()
+        }).save()
 
-            response.redirect("/shares")
-        })
+        response.redirect("/shares")
     } else {
         errorHandler("Invalid Spotify Track URL, Please head on the your preferred Spotify app, Share > Copy Song URL and Paste it again!", request, response);
     }
@@ -185,15 +195,15 @@ app.post("/new/share", (request, response) => {
 })
 
 app.get("/shares", (request, response) => {
-    fs.readFile(SHARES_DATA_PATH, (error, data) => {
+    shareModel.find().then(data => {
         response.render("shares", {
-            "shares": JSON.parse(data)
+            "shares": data
         });
     })
 })
 
 app.post("/logout", (request, response) => {
-    request.session.userdata = undefined;
+    request.session.currentUser = undefined;
     response.redirect("/")
 })
 
