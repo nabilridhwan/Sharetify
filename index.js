@@ -8,7 +8,8 @@ let SHARES_DATA_PATH = "./data/shares.json"
 let app = express();
 let mongoose = require('mongoose');
 
-require('dotenv').config()
+// FIXME: Only use this if locals
+// require('dotenv').config()
 // REMEMBER TO SET THE DB PASSWORD!
 let dbpwd = process.env.dbpwd
 
