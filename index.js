@@ -13,7 +13,7 @@ let mongoose = require('mongoose');
 // REMEMBER TO SET THE DB PASSWORD!
 let dbpwd = process.env.dbpwd
 
-mongoose.connect(`mongodb+srv://admin:${dbpwd}@sharetify-o8bis.gcp.mongodb.net/sharetify?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://admin:${dbpwd}@sharetify-o8bis.gcp.mongodb.net/sharetify?retryWrites=true&w=majority&authSource=admin`)
 .then(_ => {
     console.log("Tested connecting!")
 })
