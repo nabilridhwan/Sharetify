@@ -9,7 +9,7 @@ let app = express();
 let mongoose = require('mongoose');
 
 // FIXME: Only use this if locals
-// require('dotenv').config()
+require('dotenv').config()
 // REMEMBER TO SET THE DB PASSWORD!
 let dbpwd = process.env.dbpwd
 
@@ -37,7 +37,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(session({
-    'secret': 'nosecretnomore'
+    'secret': 'nosecretnomore',
+    resave: true
 }))
 
 app.use((request, response, next) => {
@@ -49,10 +50,9 @@ app.use((request, response, next) => {
 
 app.get("/", (request, response) => {
 
-    shareModel.findOne().then(data => {
-        console.log(data)
+    shareModel.find().then(data => {
         response.render("home", {
-            "shares": data
+            "shares": data.reverse()
         });
     })
 })
@@ -134,7 +134,6 @@ app.post("/login", (request, response) => {
                     if (isCorrect) {
                         // Set the session to the user!
                         request.session.currentUser = user;
-                        console.log(request.session)
 
                         // Redirect to profile page
                         response.redirect("profile");
